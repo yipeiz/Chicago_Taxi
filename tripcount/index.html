@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2011 Google Inc. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <title>Fusion Tables API Example: Google Chart Tools</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <style type="text/css">
+      table {
+        width: 30%;
+      }
+
+      th {
+        width: 30%;
+        text-align: left;
+      }
+    </style>
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var options = {
+          width: 400,
+          height: 240,
+          vAxis: {minValue:0, maxValue:100},
+          animation: {
+            duration: 1000,
+            easing: 'in'
+          }
+        };
+
+        var chart = new google.visualization.LineChart(
+            document.getElementById('visualization'));
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'x');
+        data.addColumn('number', 'y');
+        data.addRow(['100', 123]);
+        data.addRow(['700', 17]);
+        var button = document.getElementById('b1');
+        function drawChart() {
+          // Disabling the button while the chart is drawing.
+          button.disabled = true;
+          google.visualization.events.addListener(chart, 'ready',
+              function() {
+                button.disabled = false;
+              });
+          chart.draw(data, options);
+        }
+
+        button.onclick = function() {
+          if (data.getNumberOfRows() > 5) {
+            data.removeRow(Math.floor(Math.random() * data.getNumberOfRows()));
+          }
+          // Generating a random x, y pair and inserting it so rows are sorted.
+          var x = Math.floor(Math.random() * 1000);
+          var y = Math.floor(Math.random() * 100);
+          var where = 0;
+          while (where < data.getNumberOfRows() && parseInt(data.getValue(where, 0)) < x) {
+            where++;
+          }
+          data.insertRows(where, [[x.toString(), y]]);
+          drawChart();
+        }
+        drawChart();
+      }
+
+    </script>
+  </head>
+  <body>
+    <div>
+      <label>Scoring Team:</label>
+      <select id="team" onchange="drawTable();">
+        <option value="" selected="selected">All</option>
+        <option value="Germany">Germany</option>
+        <option value="New Zealand">New Zealand</option>
+        <option value="Uruguay">Uruguay</option>
+      </select>
+    </div>
+    <div id="visualization"></div>
+    <button id="b1">Run</button>
+  </body>
+</html>

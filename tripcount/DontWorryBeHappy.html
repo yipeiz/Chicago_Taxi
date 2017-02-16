@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2011 Google Inc. All Rights Reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<html>
+  <head>
+    <title>Google Fusion Tables API Example</title>
+  </head>
+  <body>
+    <div class="sidebar">
+      <label id="text-label1" for="text-input1">Date</label>
+      <input id="myDate" class="input-text" type="date" value="2013-01-01" ><br>
+      <br><label id="text-label2" for="text-input2">Start Hour</label>
+      <input id="myHour" class="input-text2" type="text" value="1" ><br>
+      <br><label id="text-label3" for="text-input3">PickupCommunityArea</label>
+      <input id="myArea" class="input-text3" type="text" value="1" ><br>
+      <br><button id="firstdraw">Run</button><br>
+      <br><button id="addrow">Add</button>
+    </div>
+    <br><br>
+    <div id="result"></div>
+    <br><br>
+    <div id="sankey_basic" style="width: 900px; height: 300px;"></div>
+
+    <script src="jquery-2.2.0.js"></script>
+    <script src="underscore.js"></script>
+
+    <script>
+    var theHour = "1";
+    var theDate = "2013-01-01";
+    var theArea = "1";
+    var thePiece = [];
+    var theOrder = [];
+    //theDate = $('#myDate').val()
+    //theHour = $('#myHour').val()
+    $('#firstdraw').click(function(){
+        theDate = document.getElementById("myDate").value;
+        theHour = document.getElementById("myHour").value;
+        theArea = document.getElementById("myArea").value;
+        getData();
+    //google chart
+    });
+
+    function dataHandler(resp) {
+        theOrder = resp.columns;
+        thePiece = resp.rows[0];
+        var result = document.getElementById('result');
+        var htmlTable = document.createElement('table');
+        htmlTable.border = 1;
+
+        var tableRow = document.createElement('tr');
+        for (var i = 0; i < resp.columns.length; i++) {
+            var tableHeader = document.createElement('th');
+            var header = document.createTextNode(resp.columns[i]);
+            tableHeader.appendChild(header);
+            tableRow.appendChild(tableHeader);
+
+        }
+        htmlTable.appendChild(tableRow);
+        for (var i = 0; i < resp.rows.length; i++) {
+            var tableRow = document.createElement('tr');
+            for (var j = 0; j < resp.rows[i].length; j++) {
+                var tableData = document.createElement('td');
+                var content = document.createTextNode(resp.rows[i][j]);
+                tableData.appendChild(content);
+                tableRow.appendChild(tableData);
+            }
+            htmlTable.appendChild(tableRow);
+        }
+        result.appendChild(htmlTable);
+
+        var theNum = _.range(4,81)
+
+        theAdd = _.filter(theNum,function(mynum){
+            return thePiece[mynum] != "0";
+        })
+        console.log(theAdd);
+        theSum = _.map(theAdd,function(num){
+            return parseInt(thePiece[num]);
+        });
+        console.log(Math.min.apply(null, theSum));
+        var conclude = [];
+        var count = 0;
+        var string = "Others ("
+        theAdd = _.map(theAdd,function(num){
+            if (parseInt(thePiece[num]) === Math.min.apply(null, theSum)){
+            string = string + theOrder[num] + " ";
+            count += 1;
+            return null;
+            }else{
+            var temp = [];
+            temp.push("PickUp Area "+ thePiece[3]);
+            temp.push("Dropoff Area "+ theOrder[num]);
+            temp.push(parseInt(thePiece[num]));
+            return temp;}
+        });
+        theAdd.push(["PickUp Area "+ thePiece[3], string + ")",count]);
+        theAdd = theAdd.filter(function(n){ return n != undefined });
+
+        sankeydiag();
+    };
+
+    function dataAdd(resp) {
+        theOrder = resp.columns;
+        thePiece = resp.rows[0];
+
+        var theNum = _.range(4,81)
+        theAdd2 = _.filter(theNum,function(mynum){
+            return thePiece[mynum] != "0";
+        }).map(function(num){
+            var temp = [];
+            temp.push("PickUp Area "+ thePiece[3]);
+            temp.push("Dropoff Area "+ theOrder[num]);
+            temp.push(parseInt(thePiece[num]));
+            return temp;
+        });
+
+    };
+
+    function sankeydiag() {
+        google.charts.load('current', {'packages':['sankey']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        var colors = ['#a6cee3', '#b2df8a', '#fb9a99', '#fdbf6f',
+                      '#cab2d6', '#ffff99', '#1f78b4', '#33a02c'];
+
+        function drawChart() {
+          var options = {
+            width: 400,
+            sankey: {
+              node: {
+                colors: colors
+              },
+              link: {
+                colorMode: 'gradient',
+                colors: colors
+              }
+            }
+          };
+
+          var chart = new google.visualization.Sankey(document.getElementById('sankey_basic'));
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'From');
+          data.addColumn('string', 'To');
+          data.addColumn('number', 'Weight');
+          data.addRows(theAdd);
+          console.log(data);
+
+          var button = document.getElementById('addrow');
+          button.onclick = function() {
+              addData();
+              setTimeout(function(){
+                data.addRows(theAdd2);
+                console.log(theAdd2);
+                notedrawChart();
+               }, 1000);
+          };
+
+          function notedrawChart() {
+            // Disabling the button while the chart is drawing.
+            button.disabled = true;
+            google.visualization.events.addListener(chart, 'ready',
+                function() {
+                  button.disabled = false;
+                });
+            chart.draw(data, options);
+          }
+         notedrawChart();
+
+          // Instantiates and draws our chart, passing in some options.
+        //chart.draw(data, options);
+        }
+    };
+
+    function getData() {
+        // Builds a Fusion Tables SQL query and hands the result to  dataHandler
+        var queryUrlHead = 'https://www.googleapis.com/fusiontables/v2/query?sql=';
+        var queryUrlTail = '&key=AIzaSyAAv8-7V5dOOKldXwnsqxK6Z8mw0qgbeOc';
+        var tableId = '1QOI_T6AT-dAOkQUEwEJd7AaSo63dWUIXdSpmpa3J';
+
+        // write your SQL as normal, then encode it
+        var query = "SELECT * FROM " + tableId + " WHERE 'Hour' = " + document.getElementById("myHour").value +
+        " AND 'StartDay' = '" + document.getElementById("myDate").value +"' AND 'PickupCommunityArea' = " + document.getElementById("myArea").value;
+        var queryurl = encodeURI(queryUrlHead + query + queryUrlTail);
+        var jqxhr = $.get(queryurl, dataHandler, "jsonp");
+    }
+
+    function addData() {
+        var queryUrlHead = 'https://www.googleapis.com/fusiontables/v2/query?sql=';
+        var queryUrlTail = '&key=AIzaSyAAv8-7V5dOOKldXwnsqxK6Z8mw0qgbeOc';
+        var tableId = '1QOI_T6AT-dAOkQUEwEJd7AaSo63dWUIXdSpmpa3J';
+
+        // write your SQL as normal, then encode it
+        var query = "SELECT * FROM " + tableId + " WHERE 'Hour' = " + document.getElementById("myHour").value +
+        " AND 'StartDay' = '" + document.getElementById("myDate").value +"' AND 'PickupCommunityArea' = " + document.getElementById("myArea").value;
+        var queryurl = encodeURI(queryUrlHead + query + queryUrlTail);
+        var jqxhr = $.get(queryurl, dataAdd, "jsonp");
+    }
+
+    </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+
+    </script>
+
+  </body>
+</html>
