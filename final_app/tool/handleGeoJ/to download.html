@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>spatialsankey.js - sankey diagrams on a map</title>
+
+<body>
+  <div id="container"></div>
+</body>
+<script src="underscore.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript">
+
+
+
+d3.json("https://raw.githubusercontent.com/yipeiz/temp/master/map.geojson", function(bounds) {
+
+
+  // var newF = _.map(bounds.features,function(theN){
+  //   return {
+  //     type:"Feature",
+  //     properties:theN.properties,
+  //     geometry:{
+  //       type:"MultiPolygon",
+  //       coordinates:theN.geometry.coordinates[0];
+  //     }
+  //   }
+  // });
+  console.log(bounds);
+  var theA = Array.apply(null, {length: 77}).map(Number.call, Number);
+  console.log(theA);
+
+  var newF = [];
+  _.each(theA,function(theN){
+      _.each(bounds.features,function(theF){
+          if (theF.properties.area_numbe === theN + 1){
+              newF.push(theF);
+          }
+      })
+  })
+  console.log(newF);
+
+  var newGeoJ = {
+    type: "FeatureCollection",
+    features: newF
+  }
+
+  var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(newGeoJ));
+
+  var a = document.createElement('a');
+  a.href = 'data:' + data;
+  a.download = 'data.json';
+  a.innerHTML = 'download JSON';
+
+  var container = document.getElementById('container');
+  container.appendChild(a);
+});
+
+</script>
