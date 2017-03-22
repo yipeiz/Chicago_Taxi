@@ -10,7 +10,12 @@
   <body>
     <!-- Sidebar -->
     <div class="sidebar">
-      <div id="shapes"></div>
+      <br><label id="text-label1" for="text-input1">Date</label>
+      <input id="myDate" class="input-text" type="date" value="2013-01-01" ><br>
+      <br><label id="text-label2" for="text-input2">Hour</label>
+      <input id="myHour" class="input-text" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="1" ><br>
+      <br><button id="draw">Run</button>
+      <button id="backToPickup">Pick-ups</button>
     </div>
     <!-- Map -->
     <div id="map" class="map"></div>
@@ -21,6 +26,6 @@
     <script src="js/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.2.3/leaflet.draw.js"></script>
     <script src="js/setup.js"></script>
-    <script src="js/draw.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>

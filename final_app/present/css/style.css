@@ -42,3 +42,50 @@ h2 {
     50% {opacity: 1; stroke-width: 10;}
     100% {opacity: 1;}
 }
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.info h4 {
+    font-size: 14px;
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.info h3 {
+    font-size: 12px;
+    margin: 0 0 0px;
+    color: #333;
+}
+
+.info canvas {
+    margin: 5px 0 0;
+}
+
+.info h5 {
+    font-size: 10px;
+    margin: 0 0 0px;
+    color: #111;
+    float: right;
+}
+
+.info h6 {
+    font-size: 10px;
+    margin: 0 0 0px;
+    color: #111;
+    float: left;
+}
+
+.input-text {
+    width: 150px;
+}
+
+#draw {
+    margin-right:10px;
+}
