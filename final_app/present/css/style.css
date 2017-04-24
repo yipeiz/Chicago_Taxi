@@ -4,6 +4,7 @@ body {
     font-family: colfax, helvetica, arial, sans-serif;
 }
 
+.linkCC { color:white }
 /*.map02 {
     position: absolute;
     right: 0px;
@@ -21,11 +22,23 @@ body {
     top: 0;
 }
 
+.map02 {
+    position: absolute;
+    left: 25%;
+    height: 100%;
+    width:75%;
+    top: 0;
+}
+
+#sidebar {
+  top: 0;
+}
+
 .sidebar {
     position: absolute;
     left: 0px;
     width:25%;
-    top: 0;
+    top:50px;
     bottom: 0;
     overflow-y: auto;
     padding-left: 20px;
@@ -100,6 +113,11 @@ h2 {
     margin-left: 5px;
 }
 
+#stop {
+    margin-top:10px;
+    margin-left: 5px;
+}
+
 #backToPickup{
     margin-top: 5px;
     margin-bottom: 5px;
@@ -107,4 +125,31 @@ h2 {
 
 .leaflet-container path{
   transition: fill .75s;
+}
+
+.item {
+    margin-left:0px;
+    margin-top:20px;
+    margin-right:60px;
+    padding: 10px;
+    background-color: #eee;
+}
+
+#smallitem {
+  margin-top: 10px;
+    padding-left: 5px;
+    width: 100px;
+    height:20px;
+    background-color:#a5dde2;
+    color: #FFFFFF;
+}
+
+.item:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.item-heading {
+    font-size: 18px;
+    margin-top: 0;
+    font-weight: bold;
 }

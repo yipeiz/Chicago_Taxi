@@ -10,29 +10,45 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <h3><b>Chicago Taxi Trips</b></h3>
-      <h5 style=" padding-top: 15px;padding-right: 40px;padding-bottom: 20px;">This map shows the distribution of pick-ups and drop-offs of taxi trips in Chicago. Pick a date and hour and hit GO!</h5>
-      <div class="row" style="margin-bottom:10px;">
-        <div class="col-lg-6">
-          <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Date</span>
-            <input id="myDate" class="form-control" type="date" value="2013-01-01" aria-describedby="basic-addon1">
-          </div>
+    <!-- <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Chicago Taxi Trips</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#1">History</a></li>
+          <li><a href="#2">Prediction</a></li>
+        </ul>
+        <div class="navbar-content">
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Hour</span>
-            <input id="myHour" class="form-control" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="1" aria-describedby="basic-addon1" max = "24">
+    </nav> --> -->
+    <!-- Sidebar
+
+      <div class="sidebar">
+        <h3><b>Chicago Taxi Trips</b></h3>
+        <h5 style=" padding-top: 15px;padding-right: 40px;padding-bottom: 20px;">This map shows the distribution of pick-ups and drop-offs of taxi trips in Chicago. Pick a date and hour and hit GO!</h5>
+        <div class="row" style="margin-bottom:10px;">
+          <div class="col-lg-6">
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">Date</span>
+              <input id="myDate" class="form-control" type="date" value="2013-01-01" aria-describedby="basic-addon1">
+            </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-addon1">Hour</span>
+              <input id="myHour" class="form-control" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="1" aria-describedby="basic-addon1" max = "24">
+            </div>
+          </div>
+        </div>
+        <button id="draw" type="submit" class="btn btn-default">Go!</button>
+        <!-- <button id="backToPickup">Pick-ups</button> -->
       </div>
-      <button id="draw" type="submit" class="btn btn-default">Go!</button>
-      <!-- <button id="backToPickup">Pick-ups</button> -->
-    </div>
+
+
     <!-- Map -->
     <div id="map01" class="map01"></div>
     <!-- Javascript Imports -->
